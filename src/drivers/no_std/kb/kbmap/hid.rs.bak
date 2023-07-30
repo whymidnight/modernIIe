@@ -1,0 +1,709 @@
+use alloc::vec;
+use usbd_human_interface_device::page::Keyboard;
+
+use super::LayoutWithHID;
+
+pub fn hoist_hid_keyboard_map() -> LayoutWithHID {
+    vec![
+        (
+            "0x01",
+            [(
+                "0x00",
+                (0x00, 0x00, vec![Keyboard::LeftControl]), // / :: KEY_SLASH
+            )]
+            .to_vec(),
+        ),
+        (
+            "0x03",
+            [(
+                "0x00",
+                (0x00, 0x00, vec![Keyboard::LeftShift]), // / :: KEY_SLASH
+            )]
+            .to_vec(),
+        ),
+        (
+            "0x40",
+            [
+                (
+                    "0x00",
+                    (0x00, 0x00, vec![Keyboard::LeftAlt]), // / :: KEY_SLASH
+                ),
+                (
+                    "0x2f",
+                    (
+                        0xaf,
+                        0x2f,
+                        vec![Keyboard::LeftAlt, Keyboard::LeftShift, Keyboard::Keyboard7],
+                    ), // / :: KEY_SLASH
+                ),
+                (
+                    "0x35",
+                    (0xb5, 0x35, vec![Keyboard::LeftAlt, Keyboard::Keyboard5]), // 5 :: KEY_5
+                ),
+                (
+                    "0x36",
+                    (0xb6, 0x36, vec![Keyboard::LeftAlt, Keyboard::Keyboard6]), // 6 :: KEY_6
+                ),
+                (
+                    "0x37",
+                    (0xb7, 0x37, vec![Keyboard::LeftAlt, Keyboard::Keyboard7]), // 7 :: KEY_7
+                ),
+                (
+                    "0x38",
+                    (0xb8, 0x38, vec![Keyboard::LeftAlt, Keyboard::Keyboard8]), // 8 :: KEY_8
+                ),
+                (
+                    "0x39",
+                    (0xb9, 0x39, vec![Keyboard::LeftAlt, Keyboard::Keyboard9]), // 9 :: KEY_9
+                ),
+                (
+                    "0x74",
+                    (0xf4, 0x74, vec![Keyboard::LeftGUI, Keyboard::T]), // t :: KEY_T
+                ),
+                (
+                    "0x77",
+                    (0xf7, 0x77, vec![Keyboard::LeftGUI, Keyboard::W]), // w :: KEY_W
+                ),
+                (
+                    "0x76",
+                    (0xf6, 0x76, vec![Keyboard::LeftGUI, Keyboard::V]), // v :: KEY_V
+                ),
+                (
+                    "0x61",
+                    (0xe1, 0x61, vec![Keyboard::LeftGUI, Keyboard::A]), // a :: KEY_A
+                ),
+                (
+                    "0x63",
+                    (0xe3, 0x63, vec![Keyboard::LeftGUI, Keyboard::C]), // c :: KEY_C
+                ),
+                (
+                    "0x6e",
+                    (0xee, 0x6e, vec![Keyboard::RightAlt, Keyboard::N]), // n :: KEY_N
+                ),
+                (
+                    "0x6c",
+                    (0xec, 0x6c, vec![Keyboard::RightAlt, Keyboard::L]), // l :: KEY_L
+                ),
+                (
+                    "0x0d",
+                    (0x8d, 0x0d, vec![Keyboard::Tab]), // Enter :: KEY_ENTER
+                ),
+            ]
+            .to_vec(),
+        ),
+        (
+            "0x80",
+            [
+                (
+                    "0x00",
+                    (0x00, 0x00, vec![Keyboard::LeftGUI]), // / :: KEY_SLASH
+                ),
+                (
+                    "0x6e",
+                    (0xee, 0x6e, vec![Keyboard::LeftGUI, Keyboard::N]), // n :: KEY_N
+                ),
+                (
+                    "0x68",
+                    (0xe8, 0x68, vec![Keyboard::LeftArrow]), // h :: KEY_H
+                ),
+                (
+                    "0x6a",
+                    (0xea, 0x6a, vec![Keyboard::DownArrow]), // j :: KEY_J
+                ),
+                (
+                    "0x6b",
+                    (0xeb, 0x6b, vec![Keyboard::UpArrow]), // k :: KEY_K
+                ),
+                (
+                    "0x6c",
+                    (0xec, 0x6c, vec![Keyboard::RightArrow]), // l :: KEY_L
+                ),
+                (
+                    "0x0d",
+                    (0x8d, 0x0d, vec![Keyboard::LeftShift, Keyboard::Tab]), // Enter :: KEY_ENTER
+                ),
+                (
+                    "0x37",
+                    (0xb7, 0x37, vec![Keyboard::F7]), // 7 :: KEY_7
+                ),
+                (
+                    "0x38",
+                    (0xb8, 0x38, vec![Keyboard::F8]), // 8 :: KEY_8
+                ),
+                (
+                    "0x39",
+                    (0xb9, 0x39, vec![Keyboard::F9]), // 9 :: KEY_9
+                ),
+                (
+                    "0x30",
+                    (0xb0, 0x30, vec![Keyboard::F10]), // 0 :: KEY_0
+                ),
+                (
+                    "0x7e",
+                    (0xfe, 0x7e, vec![Keyboard::F11]), // ~ :: SHIFT+KEY_GRAVE
+                ),
+                (
+                    "0x27",
+                    (0xa7, 0x27, vec![Keyboard::F12]), // ' :: KEY_APOSTROPHE
+                ),
+            ]
+            .to_vec(),
+        ),
+        (
+            "0xC0",
+            [
+                (
+                    "0x00",
+                    (0x00, 0x00, vec![Keyboard::NoEventIndicated]), // n :: KEY_N
+                ),
+                (
+                    "0x6e",
+                    (0xee, 0x6e, vec![Keyboard::LeftGUI, Keyboard::N]), // n :: KEY_N
+                ),
+                (
+                    "0x6c",
+                    (0xec, 0x6c, vec![Keyboard::LeftGUI, Keyboard::L]), // l :: KEY_L
+                ),
+                (
+                    "0x0d",
+                    (0x8d, 0x0d, vec![Keyboard::LeftGUI, Keyboard::Tab]), // Enter :: KEY_ENTER
+                ),
+            ]
+            .to_vec(),
+        ),
+        (
+            "0x00",
+            [
+                (
+                    "0x00",
+                    (
+                        0x80,
+                        0x00,
+                        vec![
+                            Keyboard::LeftControl,
+                            Keyboard::LeftShift,
+                            Keyboard::Keyboard2,
+                        ],
+                    ), // CTRL-@ :: CTRL+SHIFT+KEY_2
+                ),
+                (
+                    "0x01",
+                    (0x81, 0x01, vec![Keyboard::LeftControl, Keyboard::A]), // CTRL-A :: CTRL+KEY_A
+                ),
+                (
+                    "0x02",
+                    (0x82, 0x02, vec![Keyboard::LeftControl, Keyboard::B]), // CTRL-B :: CTRL+KEY_B
+                ),
+                (
+                    "0x03",
+                    (0x83, 0x03, vec![Keyboard::LeftControl, Keyboard::C]), // CTRL-C :: CTRL+KEY_C
+                ),
+                (
+                    "0x04",
+                    (0x84, 0x04, vec![Keyboard::LeftControl, Keyboard::D]), // CTRL-D :: CTRL+KEY_D
+                ),
+                (
+                    "0x05",
+                    (0x85, 0x05, vec![Keyboard::LeftControl, Keyboard::E]), // CTRL-E :: CTRL+KEY_E
+                ),
+                (
+                    "0x06",
+                    (0x86, 0x06, vec![Keyboard::LeftControl, Keyboard::F]), // CTRL-F :: CTRL+KEY_F
+                ),
+                (
+                    "0x07",
+                    (0x87, 0x07, vec![Keyboard::LeftControl, Keyboard::G]), // CTRL-G :: CTRL+KEY_G
+                ),
+                (
+                    "0x08",
+                    (0x88, 0x08, vec![Keyboard::LeftControl, Keyboard::H]), // CTRL-H :: KEY_LEFT
+                ),
+                (
+                    "0x09",
+                    (0x89, 0x09, vec![Keyboard::Escape]), // CTRL-I :: KEY_TAB
+                ),
+                (
+                    "0x0a",
+                    (0x8a, 0x0a, vec![Keyboard::DownArrow]), // CTRL-J :: KEY_DOWN
+                ),
+                (
+                    "0x0b",
+                    (0x8b, 0x0b, vec![Keyboard::UpArrow]), // CTRL-K :: KEY_UP
+                ),
+                (
+                    "0x0c",
+                    (0x8c, 0x0c, vec![Keyboard::LeftControl, Keyboard::L]), // CTRL-L :: CTRL+KEY_L
+                ),
+                (
+                    "0x0d",
+                    (0x8d, 0x0d, vec![Keyboard::ReturnEnter]), // Enter :: KEY_ENTER
+                ),
+                (
+                    "0x0e",
+                    (0x8e, 0x0e, vec![Keyboard::LeftControl, Keyboard::N]), // CTRL-N :: CTRL+KEY_N
+                ),
+                (
+                    "0x0f",
+                    (0x8f, 0x0f, vec![Keyboard::LeftControl, Keyboard::O]), // CTRL-O :: CTRL+KEY_O
+                ),
+                (
+                    "0x10",
+                    (0x90, 0x10, vec![Keyboard::LeftControl, Keyboard::P]), // CTRL-P :: CTRL+KEY_P
+                ),
+                (
+                    "0x11",
+                    (0x91, 0x11, vec![Keyboard::LeftControl, Keyboard::Q]), // CTRL-Q :: CTRL+KEY_Q
+                ),
+                (
+                    "0x12",
+                    (0x92, 0x12, vec![Keyboard::LeftControl, Keyboard::R]), // CTRL-R :: CTRL+KEY_R
+                ),
+                (
+                    "0x13",
+                    (0x93, 0x13, vec![Keyboard::LeftControl, Keyboard::S]), // CTRL-S :: CTRL+KEY_S
+                ),
+                (
+                    "0x14",
+                    (0x94, 0x14, vec![Keyboard::LeftControl, Keyboard::T]), // CTRL-T :: CTRL+KEY_T
+                ),
+                (
+                    "0x15",
+                    (0x95, 0x15, vec![Keyboard::LeftControl, Keyboard::U]), // CTRL-U :: KEY_RIGHT
+                ),
+                (
+                    "0x16",
+                    (0x96, 0x16, vec![Keyboard::LeftControl, Keyboard::V]), // CTRL-V :: CTRL+KEY_V
+                ),
+                (
+                    "0x17",
+                    (0x97, 0x17, vec![Keyboard::LeftControl, Keyboard::W]), // CTRL-W :: CTRL+KEY_W
+                ),
+                (
+                    "0x18",
+                    (0x98, 0x18, vec![Keyboard::LeftControl, Keyboard::X]), // CTRL-X :: CTRL+KEY_X
+                ),
+                (
+                    "0x19",
+                    (0x99, 0x19, vec![Keyboard::LeftControl, Keyboard::Y]), // CTRL-Y :: CTRL+KEY_Y
+                ),
+                (
+                    "0x1a",
+                    (0x9a, 0x1a, vec![Keyboard::LeftControl, Keyboard::Z]), // CTRL-Z :: CTRL+KEY_Z
+                ),
+                (
+                    "0x1b",
+                    (0x9b, 0x1b, vec![Keyboard::NonUSBackslash]), // ESCAPE :: KEY_ESC
+                ),
+                (
+                    "0x1c",
+                    (0x9c, 0x1c, vec![Keyboard::LeftControl, Keyboard::Backslash]), // CTRL-\ :: CTRL+KEY_BACKSLASH
+                ),
+                (
+                    "0x1d",
+                    (
+                        0x9d,
+                        0x1d,
+                        vec![Keyboard::LeftControl, Keyboard::RightBrace],
+                    ), // CTRL-] :: CTRL+KEY_RIGHTBRACE
+                ),
+                (
+                    "0x1e",
+                    (0x9e, 0x1e, vec![Keyboard::LeftControl, Keyboard::Keyboard6]), // CTRL-6 :: CTRL+KEY_6
+                ),
+                (
+                    "0x1f",
+                    (0x9f, 0x1f, vec![Keyboard::LeftControl, Keyboard::Minus]), // CTRL-- :: CTRL+KEY_MINUS
+                ),
+                (
+                    "0x20",
+                    (0xa0, 0x20, vec![Keyboard::Space]), // ' ' :: KEY_SPACE
+                ),
+                (
+                    "0x21",
+                    (0xa1, 0x21, vec![Keyboard::LeftShift, Keyboard::Keyboard1]), // ! :: SHIFT+KEY_1
+                ),
+                (
+                    "0x22",
+                    (0xa2, 0x22, vec![Keyboard::LeftShift, Keyboard::Keyboard2]), // " :: SHIFT+KEY_APOSTROPHE
+                ),
+                (
+                    "0x23",
+                    (0xa3, 0x23, vec![Keyboard::NonUSHash]), // # :: SHIFT+KEY_3
+                ),
+                (
+                    "0x24",
+                    (0xa4, 0x24, vec![Keyboard::LeftShift, Keyboard::Keyboard4]), // $ :: SHIFT+KEY_4
+                ),
+                (
+                    "0x25",
+                    (0xa5, 0x25, vec![Keyboard::LeftShift, Keyboard::Keyboard5]), // % :: SHIFT+KEY_5
+                ),
+                (
+                    "0x26",
+                    (0xa6, 0x26, vec![Keyboard::LeftShift, Keyboard::Keyboard6]), // & :: SHIFT+KEY_7
+                ),
+                (
+                    "0x27",
+                    (0xa7, 0x27, vec![Keyboard::Equal]), // ' :: KEY_APOSTROPHE
+                ),
+                (
+                    "0x28",
+                    (0xa8, 0x28, vec![Keyboard::LeftShift, Keyboard::Keyboard8]), // ( :: SHIFT+KEY_9
+                ),
+                (
+                    "0x29",
+                    (0xa9, 0x29, vec![Keyboard::LeftShift, Keyboard::Keyboard9]), // ) :: SHIFT+KEY_0
+                ),
+                (
+                    "0x2a",
+                    (0xaa, 0x2a, vec![Keyboard::LeftShift, Keyboard::RightBrace]), // * :: SHIFT+KEY_8
+                ),
+                (
+                    "0x2b",
+                    (0xab, 0x2b, vec![Keyboard::RightBrace]), // + :: SHIFT+KEY_EQUAL
+                ),
+                (
+                    "0x2c",
+                    (0xac, 0x2c, vec![Keyboard::Comma]), // , :: KEY_COMMA
+                ),
+                (
+                    "0x2d",
+                    (0xad, 0x2d, vec![Keyboard::ForwardSlash]), // - :: KEY_MINUS
+                ),
+                (
+                    "0x2e",
+                    (0xae, 0x2e, vec![Keyboard::Dot]), // . :: KEY_DOT
+                ),
+                (
+                    "0x2f",
+                    (0xaf, 0x2f, vec![Keyboard::LeftShift, Keyboard::Keyboard7]), // / :: KEY_SLASH
+                ),
+                (
+                    "0x30",
+                    (0xb0, 0x30, vec![Keyboard::Keyboard0]), // 0 :: KEY_0
+                ),
+                (
+                    "0x31",
+                    (0xb1, 0x31, vec![Keyboard::Keyboard1]), // 1 :: KEY_1
+                ),
+                (
+                    "0x32",
+                    (0xb2, 0x32, vec![Keyboard::Keyboard2]), // 2 :: KEY_2
+                ),
+                (
+                    "0x33",
+                    (0xb3, 0x33, vec![Keyboard::Keyboard3]), // 3 :: KEY_3
+                ),
+                (
+                    "0x34",
+                    (0xb4, 0x34, vec![Keyboard::Keyboard4]), // 4 :: KEY_4
+                ),
+                (
+                    "0x35",
+                    (0xb5, 0x35, vec![Keyboard::Keyboard5]), // 5 :: KEY_5
+                ),
+                (
+                    "0x36",
+                    (0xb6, 0x36, vec![Keyboard::Keyboard6]), // 6 :: KEY_6
+                ),
+                (
+                    "0x37",
+                    (0xb7, 0x37, vec![Keyboard::Keyboard7]), // 7 :: KEY_7
+                ),
+                (
+                    "0x38",
+                    (0xb8, 0x38, vec![Keyboard::Keyboard8]), // 8 :: KEY_8
+                ),
+                (
+                    "0x39",
+                    (0xb9, 0x39, vec![Keyboard::Keyboard9]), // 9 :: KEY_9
+                ),
+                (
+                    "0x3a",
+                    (0xba, 0x3a, vec![Keyboard::LeftShift, Keyboard::Dot]), // : :: SHIFT+KEY_SEMICOLON
+                ),
+                (
+                    "0x3b",
+                    (0xbb, 0x3b, vec![Keyboard::LeftShift, Keyboard::Comma]), // ; :: KEY_SEMICOLON
+                ),
+                (
+                    "0x3c",
+                    (0xbc, 0x3c, vec![Keyboard::Grave]), // < :: SHIFT+KEY_COMMA
+                ),
+                (
+                    "0x3d",
+                    (0xbd, 0x3d, vec![Keyboard::LeftShift, Keyboard::Keyboard0]), // = :: KEY_EQUAL
+                ),
+                (
+                    "0x3e",
+                    (0xbe, 0x3e, vec![Keyboard::LeftShift, Keyboard::Grave]), // > :: SHIFT+KEY_DOT
+                ),
+                (
+                    "0x3f",
+                    (0xbf, 0x3f, vec![Keyboard::LeftShift, Keyboard::Minus]), // ? :: SHIFT+KEY_SLASH
+                ),
+                (
+                    "0x40",
+                    (0xc0, 0x40, vec![Keyboard::LeftShift, Keyboard::Keyboard2]), // @ :: SHIFT+KEY_2
+                ),
+                (
+                    "0x41",
+                    (0xc1, 0x41, vec![Keyboard::LeftShift, Keyboard::A]), // A :: SHIFT+KEY_A
+                ),
+                (
+                    "0x42",
+                    (0xc2, 0x42, vec![Keyboard::LeftShift, Keyboard::B]), // B :: SHIFT+KEY_B
+                ),
+                (
+                    "0x43",
+                    (0xc3, 0x43, vec![Keyboard::LeftShift, Keyboard::C]), // C :: SHIFT+KEY_C
+                ),
+                (
+                    "0x44",
+                    (0xc4, 0x44, vec![Keyboard::LeftShift, Keyboard::D]), // D :: SHIFT+KEY_D
+                ),
+                (
+                    "0x45",
+                    (0xc5, 0x45, vec![Keyboard::LeftShift, Keyboard::E]), // E :: SHIFT+KEY_E
+                ),
+                (
+                    "0x46",
+                    (0xc6, 0x46, vec![Keyboard::LeftShift, Keyboard::F]), // F :: SHIFT+KEY_F
+                ),
+                (
+                    "0x47",
+                    (0xc7, 0x47, vec![Keyboard::LeftShift, Keyboard::G]), // G :: SHIFT+KEY_G
+                ),
+                (
+                    "0x48",
+                    (0xc8, 0x48, vec![Keyboard::LeftShift, Keyboard::H]), // H :: SHIFT+KEY_H
+                ),
+                (
+                    "0x49",
+                    (0xc9, 0x49, vec![Keyboard::LeftShift, Keyboard::I]), // I :: SHIFT+KEY_I
+                ),
+                (
+                    "0x4a",
+                    (0xca, 0x4a, vec![Keyboard::LeftShift, Keyboard::J]), // J :: SHIFT+KEY_J
+                ),
+                (
+                    "0x4b",
+                    (0xcb, 0x4b, vec![Keyboard::LeftShift, Keyboard::K]), // K :: SHIFT+KEY_K
+                ),
+                (
+                    "0x4c",
+                    (0xcc, 0x4c, vec![Keyboard::LeftShift, Keyboard::L]), // L :: SHIFT+KEY_L
+                ),
+                (
+                    "0x4d",
+                    (0xcd, 0x4d, vec![Keyboard::LeftShift, Keyboard::M]), // M :: SHIFT+KEY_M
+                ),
+                (
+                    "0x4e",
+                    (0xce, 0x4e, vec![Keyboard::LeftShift, Keyboard::N]), // N :: SHIFT+KEY_N
+                ),
+                (
+                    "0x4f",
+                    (0xcf, 0x4f, vec![Keyboard::LeftShift, Keyboard::O]), // O :: SHIFT+KEY_O
+                ),
+                (
+                    "0x50",
+                    (0xd0, 0x50, vec![Keyboard::LeftShift, Keyboard::P]), // P :: SHIFT+KEY_P
+                ),
+                (
+                    "0x51",
+                    (0xd1, 0x51, vec![Keyboard::LeftShift, Keyboard::Q]), // Q :: SHIFT+KEY_Q
+                ),
+                (
+                    "0x52",
+                    (0xd2, 0x52, vec![Keyboard::LeftShift, Keyboard::R]), // R :: SHIFT+KEY_R
+                ),
+                (
+                    "0x53",
+                    (0xd3, 0x53, vec![Keyboard::LeftShift, Keyboard::S]), // S :: SHIFT+KEY_S
+                ),
+                (
+                    "0x54",
+                    (0xd4, 0x54, vec![Keyboard::LeftShift, Keyboard::T]), // T :: SHIFT+KEY_T
+                ),
+                (
+                    "0x55",
+                    (0xd5, 0x55, vec![Keyboard::LeftShift, Keyboard::U]), // U :: SHIFT+KEY_U
+                ),
+                (
+                    "0x56",
+                    (0xd6, 0x56, vec![Keyboard::LeftShift, Keyboard::V]), // V :: SHIFT+KEY_V
+                ),
+                (
+                    "0x57",
+                    (0xd7, 0x57, vec![Keyboard::LeftShift, Keyboard::W]), // W :: SHIFT+KEY_W
+                ),
+                (
+                    "0x58",
+                    (0xd8, 0x58, vec![Keyboard::LeftShift, Keyboard::X]), // X :: SHIFT+KEY_X
+                ),
+                (
+                    "0x59",
+                    (0xd9, 0x59, vec![Keyboard::LeftShift, Keyboard::Y]), // Y :: SHIFT+KEY_Y
+                ),
+                (
+                    "0x5a",
+                    (0xda, 0x5a, vec![Keyboard::LeftShift, Keyboard::Z]), // Z :: SHIFT+KEY_Z
+                ),
+                (
+                    "0x5b",
+                    (0xdb, 0x5b, vec![Keyboard::LeftBrace]), // [ :: KEY_LEFTBRACE
+                ),
+                (
+                    "0x5c",
+                    (0xdc, 0x5c, vec![Keyboard::Backslash]), // \ :: KEY_BACKSLASH
+                ),
+                (
+                    "0x5d",
+                    (0xdd, 0x5d, vec![Keyboard::RightBrace]), // ] :: KEY_RIGHTBRACE
+                ),
+                (
+                    "0x5e",
+                    (0xde, 0x5e, vec![Keyboard::LeftShift, Keyboard::NonUSHash]), // ^ :: SHIFT+KEY_6
+                ),
+                (
+                    "0x5f",
+                    (
+                        0xdf,
+                        0x5f,
+                        vec![Keyboard::LeftShift, Keyboard::ForwardSlash],
+                    ), // _ :: SHIFT+KEY_MINUS
+                ),
+                (
+                    "0x60",
+                    (0xe0, 0x60, vec![Keyboard::LeftShift, Keyboard::Equal]), // ` :: KEY_GRAVE
+                ),
+                (
+                    "0x61",
+                    (0xe1, 0x61, vec![Keyboard::A]), // a :: KEY_A
+                ),
+                (
+                    "0x62",
+                    (0xe2, 0x62, vec![Keyboard::B]), // b :: KEY_B
+                ),
+                (
+                    "0x63",
+                    (0xe3, 0x63, vec![Keyboard::C]), // c :: KEY_C
+                ),
+                (
+                    "0x64",
+                    (0xe4, 0x64, vec![Keyboard::D]), // d :: KEY_D
+                ),
+                (
+                    "0x65",
+                    (0xe5, 0x65, vec![Keyboard::E]), // e :: KEY_E
+                ),
+                (
+                    "0x66",
+                    (0xe6, 0x66, vec![Keyboard::F]), // f :: KEY_F
+                ),
+                (
+                    "0x67",
+                    (0xe7, 0x67, vec![Keyboard::G]), // g :: KEY_G
+                ),
+                (
+                    "0x68",
+                    (0xe8, 0x68, vec![Keyboard::H]), // h :: KEY_H
+                ),
+                (
+                    "0x69",
+                    (0xe9, 0x69, vec![Keyboard::I]), // i :: KEY_I
+                ),
+                (
+                    "0x6a",
+                    (0xea, 0x6a, vec![Keyboard::J]), // j :: KEY_J
+                ),
+                (
+                    "0x6b",
+                    (0xeb, 0x6b, vec![Keyboard::K]), // k :: KEY_K
+                ),
+                (
+                    "0x6c",
+                    (0xec, 0x6c, vec![Keyboard::L]), // l :: KEY_L
+                ),
+                (
+                    "0x6d",
+                    (0xed, 0x6d, vec![Keyboard::M]), // m :: KEY_M
+                ),
+                (
+                    "0x6e",
+                    (0xee, 0x6e, vec![Keyboard::N]), // n :: KEY_N
+                ),
+                (
+                    "0x6f",
+                    (0xef, 0x6f, vec![Keyboard::O]), // o :: KEY_O
+                ),
+                (
+                    "0x70",
+                    (0xf0, 0x70, vec![Keyboard::P]), // p :: KEY_P
+                ),
+                (
+                    "0x71",
+                    (0xf1, 0x71, vec![Keyboard::Q]), // q :: KEY_Q
+                ),
+                (
+                    "0x72",
+                    (0xf2, 0x72, vec![Keyboard::R]), // r :: KEY_R
+                ),
+                (
+                    "0x73",
+                    (0xf3, 0x73, vec![Keyboard::S]), // s :: KEY_S
+                ),
+                (
+                    "0x74",
+                    (0xf4, 0x74, vec![Keyboard::T]), // t :: KEY_T
+                ),
+                (
+                    "0x75",
+                    (0xf5, 0x75, vec![Keyboard::U]), // u :: KEY_U
+                ),
+                (
+                    "0x76",
+                    (0xf6, 0x76, vec![Keyboard::V]), // v :: KEY_V
+                ),
+                (
+                    "0x77",
+                    (0xf7, 0x77, vec![Keyboard::W]), // w :: KEY_W
+                ),
+                (
+                    "0x78",
+                    (0xf8, 0x78, vec![Keyboard::X]), // x :: KEY_X
+                ),
+                (
+                    "0x79",
+                    (0xf9, 0x79, vec![Keyboard::Z]), // y :: KEY_Y
+                ),
+                (
+                    "0x7a",
+                    (0xfa, 0x7a, vec![Keyboard::Y]), // z :: KEY_Z
+                ),
+                (
+                    "0x7b",
+                    (0xfb, 0x7b, vec![Keyboard::LeftShift, Keyboard::LeftBrace]), // { :: SHIFT+KEY_LEFTBRACE
+                ),
+                (
+                    "0x7c",
+                    (0xfc, 0x7c, vec![Keyboard::LeftShift, Keyboard::Backslash]), // | :: SHIFT+KEY_BACKSLASH
+                ),
+                (
+                    "0x7d",
+                    (0xfd, 0x7d, vec![Keyboard::LeftShift, Keyboard::RightBrace]), // } :: SHIFT+KEY_RIGHTBRACE
+                ),
+                (
+                    "0x7e",
+                    (0xfe, 0x7e, vec![Keyboard::LeftShift, Keyboard::Grave]), // ~ :: SHIFT+KEY_GRAVE
+                ),
+                (
+                    "0x7f",
+                    (0xff, 0x7f, vec![Keyboard::DeleteBackspace]), // BS :: KEY_BACKSPACE
+                ),
+            ]
+            .to_vec(),
+        ),
+    ]
+}

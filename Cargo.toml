@@ -1,0 +1,58 @@
+[package]
+name = "modern_iie"
+version = "0.1.0"
+edition = "2021"
+author = "Dominic DiGiacomo"
+
+[dependencies]
+
+## std crates
+
+mio = { version =  "0.8", optional = true }
+mio-serial = { version =  "5.0.1", optional = true }
+hex = { version =  "0.4.3", default-features = false, optional = true }
+repl-rs = { version =  "0.2.7", optional = true }
+indoc = { version =  "2", optional = true }
+serde = { version = "1.0", features = ["derive"], optional = true }
+serde_json = { version =  "1.0", optional = true }
+signal-hook = { version =  "0.3.4", optional = true }
+parking_lot = { version =  "0.12.1", optional = true }
+enigo = { version =  "0.1.2", optional = true }
+itertools = { version =  "0.10", optional = true }
+
+## no-std crates
+
+cortex-m = { version =  "0.7.3", optional = true }
+cortex-m-rt = { version =  "0.7.3", optional = true }
+embedded-hal = { version = "0.2.5", features = ["unproven"], optional = true }
+defmt = { version =  "0.3.5", optional = true }
+defmt-serial = { version =  "0.5.0", optional = true }
+defmt-rtt = { version =  "0.4", optional = true }
+panic-probe = { version = "0.3", features = ["print-defmt"], optional = true }
+rp2040-hal = { version="0.8.2", features=["rt", "critical-section-impl", "defmt"], optional = true }
+rp2040-boot2 = { version =  "0.2", optional = true }
+fugit = { version =  "0.3.6", optional = true }
+hashbrown = { version =  "0.14.0", optional = true }
+usbd-human-interface-device = { version =  "0.4.3", optional = true }
+usb-device = { version =  "0.2", optional = true }
+critical-section = { version = "1.0.0", optional = true }
+embedded-alloc = { version = "0.5.0", optional = true }
+keyberon = { version = "0.1.1", optional = true }
+usbd-hid = { version = "0.6.1", optional = true }
+packed_struct = { version = "0.10", default-features = false, optional = true }
+hex-display = { version = "0.3.0", optional = true }
+
+[features]
+default = ["pico", "layout-iso"]
+pico = [ "no-std" ]
+std = ["mio", "mio-serial", "hex/std", "repl-rs", "indoc", "serde", "serde_json", "signal-hook", "parking_lot", "enigo", "itertools"]
+no-std = ["cortex-m", "cortex-m-rt", "embedded-hal", "defmt", "defmt-rtt", "panic-probe", "rp2040-hal", "rp2040-boot2", "fugit", "hashbrown", "hex", "usbd-human-interface-device", "usb-device", "critical-section", "embedded-alloc", "defmt-serial", "keyberon", "usb-device/defmt", "usbd-hid", "packed_struct", "rp2040-hal/rt", "rp2040-hal/rp2040-e5", "rp2040-hal/critical-section-impl", "probe", "hex-display"]
+layout-iso = []
+layout-ansi = []
+probe = []
+serial = []
+
+[profile.bench]
+debug = 4
+[profile.release]
+debug = 2
