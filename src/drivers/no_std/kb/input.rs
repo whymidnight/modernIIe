@@ -6,9 +6,12 @@ pub const KEY_ASCII: u8 = 0x7Fu8;
 
 pub type KeyEvent = (Key, KbDriverInput);
 
-pub enum ModifiersOrdering {
-    Contiguous,
-    Unknown,
+pub type ModifyEvent = (u8, u8, KeyEvent);
+#[derive(Clone)]
+pub enum Modify {
+    Record(ModifyEvent),
+    Remove(ModifyEvent),
+    None,
 }
 
 #[derive(Clone)]
@@ -207,10 +210,12 @@ impl Into<u8> for Modifiers {
 
 impl From<u8> for Modifiers {
     fn from(value: u8) -> Modifiers {
+        /*
         defmt::info!(
             "modifier from {}",
             utils::hex::u8_to_hex_string(value).as_str()
         );
+        */
         Modifiers::get(value).unwrap()
     }
 }

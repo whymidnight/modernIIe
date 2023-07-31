@@ -92,14 +92,18 @@ impl KeyState {
     }
 
     pub fn remove_key_event(&mut self, modifier_code: u8, scan_code: u8, key_event: KeyEvent) {
-        self.active_keys.retain(|k| {
-            let ident = k.0 == modifier_code && k.1 == scan_code;
-            if ident {
-                self.oracle
-                    .remove((modifier_code, key_event.clone()), k.clone());
-            }
-            !ident
-        })
+        /*
+        self.oracle.remove(
+            (modifier_code, key_event.clone()),
+            (
+                modifier_code.clone(),
+                key_event.clone().0.key.parse().unwrap(),
+                key_event.clone().0.usb_hid,
+            ),
+        );
+        */
+        self.active_keys
+            .retain(|k| !(k.0 == modifier_code && k.1 == scan_code))
     }
 
     pub fn generate_reports(&mut self, for_scan: (Vec<u8>, Vec<u8>)) -> Vec<KeyboardReport> {

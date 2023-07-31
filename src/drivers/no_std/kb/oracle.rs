@@ -82,6 +82,22 @@ impl KbOracle {
         let mut recordable = true;
 
         let (layer, key_event) = (key_record.0, key_record.1);
+        let is_macro_key = {
+            if key_event.0.key.parse::<u8>().unwrap() == layer
+                && layer != 0
+                && temporal_log.1 != 0x00
+            {
+                true
+            } else {
+                false
+            }
+        };
+        defmt::error!(
+            "recording handle {} :: {}",
+            utils::hex::u8_to_hex_string(layer).as_str(),
+            key_event.0.key.as_str()
+        );
+
         self.temporal_logs.retain(|active_key| {
             let (active_ticket, (active_layer, key, _keys)) = active_key.clone();
 
@@ -90,30 +106,34 @@ impl KbOracle {
             // layer (modifier_code) then hereinstating as skipped when generating
             // `Vec<KeyboardReport>`.
 
-            if layer == active_layer {
+            if is_macro_key && layer == active_layer && key.0.key.parse::<u8>().unwrap() == 0x00 {
+                false
+            } else if layer == active_layer {
                 if key_event.clone().0.key == key.0.key {
                     // recordable = false;
-                    // defmt::info!("SKIPPING due to same key !!!");
+                    // defmt::error!("SKIPPING due to same key !!!");
                     false
                     // break;
                 } else {
-                    defmt::info!(
+                    /*
+                    defmt::error!(
                         "ELSE SKIP !!! {} {} {}",
                         utils::hex::u8_to_hex_string(layer).as_str(),
                         key_event.clone().0.key.as_str(),
                         key.0.key.as_str()
                     );
+                    */
                     true
                 }
             } else {
-                // defmt::info!("PERMITTING !!!");
+                // defmt::error!("PERMITTING !!! {} {}", active_layer, key.0.key.as_str());
                 true
             }
         });
         /*
          */
 
-        if recordable {
+        if recordable || is_macro_key {
             // defmt::info!("PUSHING TEMP LOG !!!");
             self.temporal_logs
                 .push((ticket, (layer, key_event, temporal_log)))
@@ -121,10 +141,12 @@ impl KbOracle {
     }
 
     pub fn remove(&mut self, key_record: (u8, KeyEvent), temporal_log: ActiveKey) {
-        let ticket = self.temporal_logs.len() as KbOracleTicket;
-        let mut recordable = true;
-
         let (layer, key_event) = (key_record.0, key_record.1);
+        defmt::error!(
+            "removing handle {} :: {}",
+            utils::hex::u8_to_hex_string(layer).as_str(),
+            key_event.0.key.as_str()
+        );
         self.temporal_logs.retain(|active_key| {
             let (active_ticket, (active_layer, key, _keys)) = active_key.clone();
 
@@ -138,6 +160,16 @@ impl KbOracle {
             } else {
                 true
             }
+        });
+        /*
+         */
+    }
+
+    pub fn drop(&mut self, ticket: KbOracleTicket) {
+        self.temporal_logs.retain(|active_key| {
+            let (active_ticket, (_active_layer, _key, _keys)) = active_key.clone();
+
+            active_ticket != ticket
         });
         /*
          */
@@ -163,7 +195,7 @@ impl KbOracle {
                 {
                     acc.push(l);
                 } else {
-                    defmt::info!("SKIPPING_REPORT due to same key !!!");
+                    defmt::error!("SKIPPING_REPORT due to same key !!! {} {}", key.0, key.1);
                 }
                 /*
                 if idx >= self.current_ticket {
@@ -238,6 +270,7 @@ impl KbOracle {
                     keycodes
                 },
             };
+            /*
             defmt::info!(
                 "keys chunked :::: {}",
                 keys.iter()
@@ -247,6 +280,7 @@ impl KbOracle {
             );
 
             defmt::info!("reporting !!! {} {}", report.modifier, report.keycodes);
+            */
 
             reports.push(report)
         }

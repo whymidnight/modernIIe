@@ -158,10 +158,6 @@ pub fn hoist_hid_keyboard_map() -> LayoutWithHID {
                     "0x7e",
                     (0xfe, 0x7e, vec![Keyboard::F11]), // ~ :: SHIFT+KEY_GRAVE
                 ),
-                (
-                    "0x27",
-                    (0xa7, 0x27, vec![Keyboard::F12]), // ' :: KEY_APOSTROPHE
-                ),
             ]
             .to_vec(),
         ),
