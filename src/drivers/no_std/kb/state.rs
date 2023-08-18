@@ -4,16 +4,16 @@ use alloc::vec;
 use alloc::vec::Vec;
 
 use usbd_hid::descriptor::KeyboardReport;
-use usbd_human_interface_device::page::Keyboard;
 
 use crate::drivers::shared::kb::Key;
 
 use super::{
     input::{KbDriverInput, KeyEvent, Modifiers},
-    oracle::KbOracle,
+    kbmap::KeyboardMapEntrant,
+    oracle::{KbOracle, KbOracleReports},
 };
 
-pub type ActiveKey = (u8, u8, Vec<Keyboard>);
+pub type ActiveKey = (u8, u8, Vec<KeyboardMapEntrant>);
 pub type ActiveKeys = Vec<ActiveKey>;
 
 #[derive(Clone)]
@@ -78,6 +78,13 @@ impl KeyState {
         }
     }
 
+    pub fn last_pressed(&self, modifier_code: u8, scan_code: u8) -> bool {
+        match self.active_keys.iter().last() {
+            Some(k) => k.0 == modifier_code && k.1 == scan_code,
+            None => false,
+        }
+    }
+
     pub fn previously_pressed(&self, modifier_code: u8, scan_code: u8) -> bool {
         self.active_keys
             .iter()
@@ -106,7 +113,7 @@ impl KeyState {
             .retain(|k| !(k.0 == modifier_code && k.1 == scan_code))
     }
 
-    pub fn generate_reports(&mut self, for_scan: (Vec<u8>, Vec<u8>)) -> Vec<KeyboardReport> {
+    pub fn generate_reports(&mut self, for_scan: (Vec<u8>, Vec<u8>)) -> Vec<KbOracleReports> {
         self.oracle.generate_reports(for_scan)
     }
 }
@@ -177,8 +184,8 @@ impl PartialEq for KeyState {
                     }
                     acc = other.active_keys[idx].2.iter().enumerate().fold(
                         true,
-                        |mut inner_acc, (inner_idx, &other_inner_k)| {
-                            if other_inner_k != k.2[inner_idx] {
+                        |mut inner_acc, (inner_idx, other_inner_k)| {
+                            if other_inner_k.clone() != k.2[inner_idx] {
                                 inner_acc = false;
                             }
                             acc

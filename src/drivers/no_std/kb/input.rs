@@ -210,12 +210,10 @@ impl Into<u8> for Modifiers {
 
 impl From<u8> for Modifiers {
     fn from(value: u8) -> Modifiers {
-        /*
         defmt::info!(
             "modifier from {}",
             utils::hex::u8_to_hex_string(value).as_str()
         );
-        */
         Modifiers::get(value).unwrap()
     }
 }

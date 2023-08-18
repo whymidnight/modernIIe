@@ -12,10 +12,13 @@ use alloc::vec::Vec;
 use core::borrow::{Borrow, BorrowMut};
 use core::{cell::RefCell, convert::Infallible};
 use critical_section::Mutex;
+use drivers::no_std::kb::oracle::KbOracleReports;
 use embedded_hal::digital::v2::{InputPin, OutputPin};
 use hal::gpio::bank0::{Gpio16, Gpio17, Gpio18};
 use hal::gpio::{Input, Output, Pin, PullDown, PullUp, PushPull};
 use hal::multicore::{Multicore, Stack};
+use usbd_human_interface_device::device::consumer::{ConsumerControl, ConsumerControlConfig};
+use usbd_human_interface_device::usb_class::{UsbHidClass, UsbHidClassBuilder};
 
 use usb_device::class_prelude::*;
 use usb_device::prelude::*;
@@ -25,6 +28,7 @@ use crate::drivers::shared::kb::KeyboardDriver;
 use cortex_m::prelude::_embedded_hal_timer_CountDown;
 use cortex_m::singleton;
 use embedded_alloc::Heap;
+use frunk::{HCons, HNil, ToMut};
 use fugit::{ExtU32, HertzU32, RateExtU32};
 use hal::clocks::Clock;
 use hal::dma::DMAExt;
@@ -46,9 +50,8 @@ use defmt_rtt as _;
 #[cfg(feature = "serial")]
 use defmt_serial as _;
 
-const SCAN_LOOP_RATE_MS: u32 = 10;
-const DEBOUNCE_MS: u8 = 10;
-const DEBOUNCE_TICKS: u8 = DEBOUNCE_MS / (SCAN_LOOP_RATE_MS as u8);
+const SCAN_LOOP_RATE_MS: u32 = 5;
+const DEBOUNCE_TICKS: u8 = 1;
 
 #[link_section = ".boot2"]
 #[used]
@@ -62,12 +65,13 @@ const XTAL_FREQ_HZ: u32 = 12_000_000u32;
 static mut USB_BUS: Option<usb_device::bus::UsbBusAllocator<UsbBus>> = None;
 static mut USB_DEVICE: Option<UsbDevice<'static, UsbBus>> = None;
 static mut USB_HID: Option<HIDClass<'static, UsbBus>> = None;
-static KEYBOARD_REPORT: Mutex<RefCell<KeyboardReport>> = Mutex::new(RefCell::new(KeyboardReport {
-    modifier: 0,
-    reserved: 0,
-    leds: 0,
-    keycodes: [0u8; 6],
-}));
+static KEYBOARD_REPORT: Mutex<RefCell<KbOracleReports>> =
+    Mutex::new(RefCell::new(KbOracleReports::Keyboard(KeyboardReport {
+        modifier: 0,
+        reserved: 0,
+        leds: 0,
+        keycodes: [0u8; 6],
+    })));
 
 type Pins = (
     Pin<Gpio16, Output<PushPull>>,
@@ -177,10 +181,10 @@ fn main() -> ! {
 
     let usb_device = UsbDeviceBuilder::new(
         unsafe { USB_BUS.as_ref().unwrap() },
-        UsbVidPid(0x16c0, 0x27db),
+        UsbVidPid(0x05ac, 0x0220),
     )
-    .manufacturer("whymidnight")
-    .product("Apple IIe Keyboard")
+    .manufacturer("Apple Inc.")
+    .product("Apple Keyboard")
     // .serial_number("00123")
     .supports_remote_wakeup(true)
     .build();
@@ -236,15 +240,7 @@ fn main() -> ! {
     let mut debounce: Debounce<NUM_MODS, NUM_ROWS, NUM_COLS> = Debounce::new(DEBOUNCE_TICKS);
 
     critical_section::with(|cs| {
-        KEYBOARD_REPORT.replace(
-            cs,
-            KeyboardReport {
-                modifier: 0,
-                reserved: 0,
-                leds: 0,
-                keycodes: [0u8; 6],
-            },
-        );
+        KEYBOARD_REPORT.replace(cs, KbOracleReports::init());
     });
 
     unsafe {
@@ -259,7 +255,7 @@ fn main() -> ! {
             critical_section::with(|cs| {
                 for report in reports {
                     KEYBOARD_REPORT.replace(cs, report);
-                    delay.delay_ms(10);
+                    // delay.delay_ms(10);
                 }
             });
         }
@@ -282,9 +278,26 @@ unsafe fn USBCTRL_IRQ() {
     }
 
     let report = critical_section::with(|cs| *KEYBOARD_REPORT.borrow_ref(cs));
-    if let Err(_err) = usb_hid.push_input(&report) {
-        let _no_op = 0;
-    }
+    match report {
+        KbOracleReports::Keyboard(k) => {
+            if let Err(_err) = usb_hid.push_input(&k) {
+                let _no_op = 0;
+            }
+        }
+        KbOracleReports::Consumer(c) => loop {
+            let fn_key = usb_hid.push_input(&c);
+            match fn_key {
+                Ok(_) => break,
+                Err(UsbError::WouldBlock) => {
+                    continue;
+                }
+                Err(e) => {
+                    defmt::error!("{}", e);
+                    break;
+                }
+            }
+        },
+    };
 
     // macOS doesn't like it when you don't pull this, apparently.
     // TODO: maybe even parse something here
@@ -292,10 +305,7 @@ unsafe fn USBCTRL_IRQ() {
 
     // Wake the host if a key is pressed and the device supports
     // remote wakeup.
-    if !report_is_empty(&report)
-        && usb_dev.state() == UsbDeviceState::Suspend
-        && usb_dev.remote_wakeup_enabled()
-    {
+    if usb_dev.state() == UsbDeviceState::Suspend && usb_dev.remote_wakeup_enabled() {
         usb_dev.bus().remote_wakeup();
     }
 }

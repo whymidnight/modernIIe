@@ -1,5 +1,4 @@
 mod hid;
-use usbd_human_interface_device::page::Keyboard;
 
 use crate::drivers::shared::kb::{Key, KeyboardKeyMap};
 use crate::utils::hex::{self, u8_to_hex_string};
@@ -11,8 +10,10 @@ use self::hid::hoist_hid_keyboard_map;
 #[cfg(feature = "no-std")]
 use super::input::KbDriverInput;
 use super::input::KEY_ASCII;
+#[cfg(feature = "no-std")]
+pub use hid::KeyboardMapEntrant;
 
-pub type LayoutKeyWithHIDEntrant = (u8, u8, Vec<Keyboard>);
+pub type LayoutKeyWithHIDEntrant = (u8, u8, Vec<KeyboardMapEntrant>);
 pub type LayoutKeyWithHID = (&'static str, LayoutKeyWithHIDEntrant);
 pub type LayoutKey = (&'static str, (u8, u8));
 pub type Layout = [(&'static str, [LayoutKey; 128]); 1];
@@ -29,7 +30,7 @@ impl KeyMap {
         let hid = hoist_hid_keyboard_map();
 
         let mut layers: Vec<Option<Vec<Option<LayoutKeyWithHIDEntrant>>>> = Vec::new();
-        for _ in 0..0xC1 {
+        for _ in 0..0xC5 {
             layers.push(None);
         }
 

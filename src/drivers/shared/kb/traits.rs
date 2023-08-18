@@ -10,6 +10,9 @@ use crate::drivers::no_std::kb::decoder::{Debounce, NUM_COLS, NUM_MODS, NUM_ROWS
 use crate::drivers::no_std::kb::input::KbDriverInput;
 
 #[cfg(feature = "no-std")]
+use crate::drivers::no_std::kb::oracle::KbOracleReports;
+
+#[cfg(feature = "no-std")]
 use usbd_hid::descriptor::KeyboardReport;
 
 #[cfg(feature = "no-std")]
@@ -29,7 +32,7 @@ pub trait KeyboardDriver {
         columns: &mut [&mut dyn embedded_hal::digital::v2::OutputPin<Error = Infallible>],
         delay: &mut Delay,
         debounce: &mut Debounce<NUM_MODS, NUM_ROWS, NUM_COLS>,
-    ) -> Option<Vec<KeyboardReport>>;
+    ) -> Option<Vec<KbOracleReports>>;
     #[cfg(feature = "no-std")]
     fn hid_report(self) -> Vec<KeyboardReport>;
 }
